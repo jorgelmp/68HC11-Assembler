@@ -1,0 +1,126 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package herramientas;
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.HashMap;
+import java.util.HashSet;
+
+
+/**
+ *
+ * @author jorge
+ */
+public class Serializador {
+    public static void guardarObjeto(Object o,String filename){
+        try{
+            FileOutputStream fo = new FileOutputStream(filename);
+            ObjectOutputStream oo = new ObjectOutputStream(fo);
+  
+            oo.writeObject(o);
+            
+            oo.close();
+            fo.close();
+            
+            //System.out.println("Objeto serializado");
+            
+        }catch(IOException e){
+            System.out.println("IOException caught");        
+        }
+    }
+    
+    public static HashMap<String,String> abrirHashMapString2(String filename){
+        HashMap<String,String> map = null;
+        try
+        {
+            FileInputStream fi = new FileInputStream(filename);
+            ObjectInputStream oi = new ObjectInputStream(fi);
+  
+            map = (HashMap<String,String>) oi.readObject();
+            
+            oi.close();
+            fi.close();
+            
+            //System.out.println("HashMap de cadenas deserializado");
+        }
+        catch(IOException e)
+        {
+            
+            System.out.println("No se pudo deserializar el HashMap");
+            System.out.println("IOException caught");        
+        }
+        catch(ClassNotFoundException c){            
+            System.out.println("No se pudo deserializar el HashMap");
+            System.out.println("ClassNotFoundException caught");
+        }
+        
+        return map;
+        
+    }
+    
+    public static HashSet<String> abrirHashSetString(String filename){
+        HashSet<String> set = new HashSet<String>();
+        try
+        {
+            FileInputStream fi = new FileInputStream(filename);
+            ObjectInputStream oi = new ObjectInputStream(fi);
+  
+            set = (HashSet<String>) oi.readObject();
+            
+            oi.close();
+            fi.close();
+            
+            //System.out.println("HashSet de cadenas deserializado");
+        }
+        catch(IOException e)
+        {
+            
+            System.out.println("No se pudo deserializar el HashSet");
+            System.out.println("IOException caught");        
+        }
+        catch(ClassNotFoundException c){            
+            System.out.println("No se pudo deserializar el HashSet");
+            System.out.println("ClassNotFoundException caught");
+        }
+        
+        return set;
+    }
+    
+    public static String[][] abrirArreglo2(String filename){
+        String[][] arr = null;
+        try
+        {
+            FileInputStream f1 = new FileInputStream(filename);
+            ObjectInputStream o1 = new ObjectInputStream(f1);
+  
+            arr = (String[][]) o1.readObject();
+            
+            o1.close();
+            f1.close();
+            
+            //System.out.println("Arreglo bidimensional deserializado");
+        }
+        catch(IOException e)
+        {
+            System.out.println("No se pudo deserializar el arreglo");
+            System.out.println("IOException caught");        
+        }
+        catch(ClassNotFoundException c)
+        {
+            System.out.println("No se pudo deserializar el arreglo");
+            System.out.println("ClassNotFoundException caught");
+        }
+        
+        return arr;
+    }
+    
+    
+}
+
