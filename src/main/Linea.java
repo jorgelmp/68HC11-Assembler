@@ -14,7 +14,7 @@ public class Linea{
     String aux;
     int error = 0;
     
-    public static final int DEFAULT  = 16;
+    private static final int DEFAULT  = 16;
     private static String espacio = new String(new char[DEFAULT]).replace('\0', ' ');
     
 /*
@@ -49,7 +49,7 @@ public class Linea{
                 return new Variable(linea);
             if(esDirectiva(linea))
                 return new Directiva(linea);
-            return new Linea(getSpace(DEFAULT)+linea+"\n"+ getSpace(DEFAULT)+lanzarError(9)); //Error carece de espacio relativo al margen
+            return new Linea(generarError(linea,9,0)); //Error carece de espacio relativo al margen
         }
         
         if(esDirectiva(linea))
@@ -134,33 +134,48 @@ public class Linea{
         return linea;
     }
     
-    static String lanzarError(int error){
-        switch(error){
+    static String generarError(String linea, int cual, int donde){
+        String error;
+        switch(cual){
             case 1:
-                return "^001 CONSTANTE INEXISTENTE";
+                error= "^001 CONSTANTE INEXISTENTE";
+                break;
             case 2:
-                return "^002 VARIABLE INEXISTENTE";
+                error= "^002 VARIABLE INEXISTENTE";
+                break;
             case 3:
-                return "^003 ETIQUETA INEXISTENTE";
+                error = "^003 ETIQUETA INEXISTENTE";
+                break;
             case 4:
-                return "^004 MNEMONICO INEXISTENTE";
+                error = "^004 MNEMONICO INEXISTENTE";
+                break;
             case 5:
-                return "^005 INSTRUCCIÓN CARECE DE OPERANDOS";
+                error =  "^005 INSTRUCCIÓN CARECE DE OPERANDOS";
+                break;
             case 6:
-                return "^006 INSTRUCCIÓN NO LLEVA OPERANDOS";
+                error = "^006 INSTRUCCIÓN NO LLEVA OPERANDOS";
+                break;
             case 7:
-                return "^007 MAGNITUD DE OPERANDO ERRÓNEA";
+                error = "^007 MAGNITUD DE OPERANDO ERRÓNEA";
+                break;
             case 8:
-                return "^008 SALTO RELATIVO MUY LEJANO ";
+                error = "^008 SALTO RELATIVO MUY LEJANO ";
+                break;
             case 9:
-                return "^009 INSTRUCCIÓN CARECE DE AL MENOS UN ESPACIO RELATIVO AL MARGEN";
+                error =  "^009 INSTRUCCIÓN CARECE DE AL MENOS UN ESPACIO RELATIVO AL MARGEN";
+                break;
             case 10:
-                return "^010 NO SE ENCUENTRA END";
+                error = "^010 NO SE ENCUENTRA END";
+                break;
             default:
                 return "";
         }
+        return getSpace()+linea+"\n"+getSpace()+getSpace(donde)+ error;
+        
     }
-    
+    public static String getSpace(){
+        return espacio;
+    }
     public static String getSpace(int howMuch){
         return new String(new char[howMuch]).replace('\0', ' ');
     }

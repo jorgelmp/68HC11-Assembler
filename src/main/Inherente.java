@@ -18,7 +18,7 @@ public class Inherente extends Direccionamiento{
     public Inherente(String linea, String mnemonico){
         super(linea);
         this.mnemonico = mnemonico;
-        this.opcode = tabla.get(mnemonico);        
+        this.opcode = tabla.get(mnemonico.toLowerCase());        
     }
     
     @Override

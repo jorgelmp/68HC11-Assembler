@@ -30,12 +30,11 @@ public class Inmediato extends Direccionamiento{
         operando = operandoToHex(operando);
         
         if(operando.isEmpty()){
-            
-            return getSpace(DEFAULT)+linea+"\n"+ getSpace(DEFAULT)+getSpace(error)+lanzarError(1); //Constante inexistente
+            return generarError(linea,1,error); //Constante inexistente
         }
             
         if(operando.length()>4){            
-            return getSpace(DEFAULT)+linea+"\n"+ getSpace(DEFAULT)+getSpace(error)+lanzarError(7);//Magnitud de operando errónea;
+            return generarError(linea,7,error); //Magnitud de operando errónea;
         }
         
         String aImprimir = Main.getAddress() + " " + opcode + operando;        

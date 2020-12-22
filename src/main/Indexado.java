@@ -48,7 +48,7 @@ public class Indexado extends Direccionamiento{
         int error = linea.indexOf(operando);
         operandoToHex();
         if(operando.length()>2)
-            return getSpace(DEFAULT)+linea+"\n"+getSpace(DEFAULT)+getSpace(error)+lanzarError(7);
+            return generarError(linea,7,error); //Magnitud de operando erronea
         aImprimir += Main.getAddress() + " " + opcode + operando;
         updateAddress();
             

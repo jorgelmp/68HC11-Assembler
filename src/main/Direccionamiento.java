@@ -40,28 +40,28 @@ public abstract class Direccionamiento extends Linea{
         
         if(!mneExists(mnemonico)){
             int error = linea.indexOf(mnemonico);
-            return new Linea(getSpace(DEFAULT)+linea+"\n"+getSpace(DEFAULT)+getSpace(error)+lanzarError(4)); //Error Mnemonico inexistente
+            return new Linea(generarError(linea,4,error)); //Error Mnemonico inexistente
         }
         
         
         if(Inherente.contieneMne(mnemonico)){
             if(partes.length > 1){
                 int error = linea.indexOf(partes[1]);
-                return new Linea(getSpace(DEFAULT)+linea+"\n"+getSpace(DEFAULT)+getSpace(error)+lanzarError(6)); //Error No lleva operando
+                return new Linea(generarError(linea,6,error)); //Error No lleva operando
             }
             return new Inherente(linea,mnemonico);
         }
         
         if(partes.length == 1){
             int error = linea.indexOf(mnemonico)+mnemonico.length()+1;
-            return new Linea(getSpace(DEFAULT)+linea+"\n"+getSpace(DEFAULT)+getSpace(error)+lanzarError(5)); //Error carece de operando
+            return new Linea(generarError(linea,5,error)); //Error carece de operando
         }
         
         String operando = partes[1];
         Matcher indxM = Pattern.compile(",x|,X").matcher(operando);
         Matcher indyM = Pattern.compile(",y|,Y").matcher(operando);
         Matcher dirM = Pattern.compile(",#").matcher(operando);
-        
+        /*
         
         if(mnemonico.toUpperCase() == "BRCLR" || mnemonico.toUpperCase() == "BRSET"){
             if(partes.length < 3)
@@ -83,7 +83,7 @@ public abstract class Direccionamiento extends Linea{
                 return new Indexado(linea,mnemonico, operando,false,"B");
             if(dirM.find())
                 return new Directo(linea,mnemonico, operando, "B");
-        }
+        }*/
         
         if(Relativo.contieneMne(mnemonico)){
             return new Relativo(linea);
@@ -98,8 +98,8 @@ public abstract class Direccionamiento extends Linea{
         }
         
         if(Inmediato.contieneMne(mnemonico) && operando.charAt(0)=='#'){
-            if(operando.contains(","))
-                operando+= " "+partes[2];
+            /*if(operando.contains(","))
+                operando+= " "+partes[2];*/
             return new Inmediato(linea,mnemonico,operando);
         }
         
@@ -121,12 +121,12 @@ public abstract class Direccionamiento extends Linea{
             operando = operando.substring(1);
             if(dir && !ext){
                 if(operando.length()>2)
-                    return new Linea(getSpace(DEFAULT)+linea+"\n"+getSpace(DEFAULT)+getSpace(error)+lanzarError(7));
+                    return new Linea(generarError(linea,7,error));
                 return new Directo(linea,mnemonico,operando);
             }
             else if(ext && !dir){
                 if(operando.length()>4)
-                    return new Linea(getSpace(DEFAULT)+linea+"\n"+getSpace(DEFAULT)+getSpace(error)+lanzarError(7));
+                    return new Linea(generarError(linea,7,error));
                 return new Extendido(linea,mnemonico,operando);
             }
             else if(dir && ext)
@@ -135,10 +135,11 @@ public abstract class Direccionamiento extends Linea{
                     return new Directo(linea,mnemonico, operando);
                 else if(operando.length()<5)
                     return new Extendido(linea,mnemonico, operando);     
-                return new Linea(getSpace(DEFAULT)+linea+"\n"+getSpace(DEFAULT)+getSpace(error)+lanzarError(7));
+                return new Linea(generarError(linea,7,error));
             }
         }
-        return new Linea(getSpace(DEFAULT)+linea+"\n"+getSpace(DEFAULT)+getSpace(error)+lanzarError(2)); //Variable inexistente (Etiqueta?)
+        //dasdsada
+        return new Linea(generarError(linea,2,error)); //Variable inexistente (Etiqueta?)
     }
     
     static String operandoToHex(String operando){
