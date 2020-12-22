@@ -1,0 +1,215 @@
+                *hola
+                *como estas
+     003A       SHUAI    EQU    $003A
+     7835       Fercho   EQU    $7835
+     85AF       SHEN     EQU    $85AF *hola
+     1232       JORGE    EQU    $1232
+     8000            ORG  $8000
+                *Inherentes
+                     abx as
+                         ^006 INSTRUCCIÓN NO LLEVA OPERANDOS
+8000 1B              aba
+8001 183A            aby
+8003 48              asla
+8004 58              aslb
+                *Imediatos
+8005 8645            LDAA #$45 *JOAKO
+8007 836B            SUBD #'k*HOLA
+                     ADDD 
+                          ^005 INSTRUCCIÓN CARECE DE OPERANDOS
+8009 8485AF          ANDA #SHEN 
+                     ANDA #SHENE
+                           ^001 CONSTANTE INEXISTENTE
+800C            CICLO
+                *Directo
+800C 993A            ADCA SHUAI
+800E 1A B31200       CPD  $1200
+                     CMPA 
+                          ^005 INSTRUCCIÓN CARECE DE OPERANDOS
+                     CMPA JESUS
+                          ^002 VARIABLE INEXISTENTE
+800E 8000            FCB $80,$00 *hola como estas
+                *Extendido
+                     ADCA 
+                          ^005 INSTRUCCIÓN CARECE DE OPERANDOS
+                     ASR  SHUAIN
+                          ^002 VARIABLE INEXISTENTE
+                     BITA $BB000
+                          ^007 MAGNITUD DE OPERANDO ERRÓNEA
+                     CPD  66000
+                          ^007 MAGNITUD DE OPERANDO ERRÓNEA
+                *Indexado X,Y
+                     LDAA $450,Y *Hola
+                          ^007 MAGNITUD DE OPERANDO ERRÓNEA
+                     ADDB 
+                          ^005 INSTRUCCIÓN CARECE DE OPERANDOS
+                     BITA $JORGE,X
+                          ^007 MAGNITUD DE OPERANDO ERRÓNEA
+800E 1860F5          NEG  $F5,y
+     
+     8000            ORG  $8000
+8000 8000       RESET FCB $80,$00
+
+                     END   $8000
+                *hola
+                *como estas
+     003A       SHUAI    EQU    $003A
+     7835       Fercho   EQU    $7835
+     85AF       SHEN     EQU    $85AF *hola
+     1232       JORGE    EQU    $1232
+     8000            ORG  $8000
+                *Inherentes
+                     abx as
+                         ^006 INSTRUCCIÓN NO LLEVA OPERANDOS
+8000 1B              aba
+8001 183A            aby
+8003 48              asla
+8004 58              aslb
+                *Imediatos
+                LDAA #$45 *JOAKO
+                ^009 INSTRUCCIÓN CARECE DE AL MENOS UN ESPACIO RELATIVO AL MARGEN
+8005 836B            SUBD #'k*HOLA
+                     ADDD 
+                          ^005 INSTRUCCIÓN CARECE DE OPERANDOS
+8007 8485AF          ANDA #SHEN 
+                     ANDA #SHENE
+                           ^001 CONSTANTE INEXISTENTE
+800A            CICLO
+                *Directo
+800A 993A            ADCA SHUAI
+800C 1A B31200       CPD  $1200
+                     CMPA 
+                          ^005 INSTRUCCIÓN CARECE DE OPERANDOS
+                     CMPA JESUS
+                          ^002 VARIABLE INEXISTENTE
+800C 8000            FCB $80,$00 *hola como estas
+                *Extendido
+                     ADCA 
+                          ^005 INSTRUCCIÓN CARECE DE OPERANDOS
+                     ASR  SHUAIN
+                          ^002 VARIABLE INEXISTENTE
+                     BITA $BB000
+                          ^007 MAGNITUD DE OPERANDO ERRÓNEA
+                     CPD  66000
+                          ^007 MAGNITUD DE OPERANDO ERRÓNEA
+                *Indexado X,Y
+                     LDAA $450,Y *Hola
+                          ^007 MAGNITUD DE OPERANDO ERRÓNEA
+                     ADDB 
+                          ^005 INSTRUCCIÓN CARECE DE OPERANDOS
+                     BITA $JORGE,X
+                          ^007 MAGNITUD DE OPERANDO ERRÓNEA
+800C 1860F5          NEG  $F5,y
+     
+     8000            ORG  $8000
+8000 8000       RESET FCB $80,$00
+
+                     END   $8000
+                *hola
+                *como estas
+     003A       SHUAI    EQU    $003A
+     7835       Fercho   EQU    $7835
+     85AF       SHEN     EQU    $85AF *hola
+     1232       JORGE    EQU    $1232
+     8000            ORG  $8000
+                *Inherentes
+                     abx as
+                         ^006 INSTRUCCIÓN NO LLEVA OPERANDOS
+8000 1B              aba
+8001 183A            aby
+8003 48              asla
+8004 58              aslb
+                *Imediatos
+                LDAA #$45 *JOAKO
+                ^009 INSTRUCCIÓN CARECE DE AL MENOS UN ESPACIO RELATIVO AL MARGEN
+8005 836B            SUBD #'k*HOLA
+                     ADDD 
+                          ^005 INSTRUCCIÓN CARECE DE OPERANDOS
+8007 8485AF          ANDA #SHEN 
+                     ANDA #SHENE
+                           ^001 CONSTANTE INEXISTENTE
+800A            CICLO
+                *Directo
+800A 993A            ADCA SHUAI
+800C 1A B31200       CPD  $1200
+                     CMPA 
+                          ^005 INSTRUCCIÓN CARECE DE OPERANDOS
+                     CMPA JESUS
+                          ^002 VARIABLE INEXISTENTE
+800C 8000            FCB $80,$00 *hola como estas
+                *Extendido
+                     ADCA 
+                          ^005 INSTRUCCIÓN CARECE DE OPERANDOS
+                     ASR  SHUAIN
+                          ^002 VARIABLE INEXISTENTE
+                     BITA $BB000
+                          ^007 MAGNITUD DE OPERANDO ERRÓNEA
+                     CPD  66000
+                          ^007 MAGNITUD DE OPERANDO ERRÓNEA
+                *Indexado X,Y
+                     LDAA $450,Y *Hola
+                          ^007 MAGNITUD DE OPERANDO ERRÓNEA
+                     ADDB 
+                          ^005 INSTRUCCIÓN CARECE DE OPERANDOS
+                     BITA $JORGE,X
+                          ^007 MAGNITUD DE OPERANDO ERRÓNEA
+800C 1860F5          NEG  $F5,y
+     
+     8000            ORG  $8000
+8000 8000       RESET FCB $80,$00
+
+                     END   $8000
+                *hola
+                *como estas
+     003A       SHUAI    EQU    $003A
+     7835       Fercho   EQU    $7835
+     85AF       SHEN     EQU    $85AF *hola
+     1232       JORGE    EQU    $1232
+     8000            ORG  $8000
+                *Inherentes
+                     abx as
+                         ^006 INSTRUCCIÓN NO LLEVA OPERANDOS
+8000 1B              aba
+8001 183A            aby
+8003 48              asla
+8004 58              aslb
+                *Imediatos
+                LDAA #$45 *JOAKO
+                ^009 INSTRUCCIÓN CARECE DE AL MENOS UN ESPACIO RELATIVO AL MARGEN
+8005 836B            SUBD #'k*HOLA
+                     ADDD 
+                          ^005 INSTRUCCIÓN CARECE DE OPERANDOS
+8007 8485AF          ANDA #SHEN 
+                     ANDA #SHENE
+                           ^001 CONSTANTE INEXISTENTE
+800A            CICLO
+                *Directo
+800A 993A            ADCA SHUAI
+800C 1A B31200       CPD  $1200
+                     CMPA 
+                          ^005 INSTRUCCIÓN CARECE DE OPERANDOS
+                     CMPA JESUS
+                          ^002 VARIABLE INEXISTENTE
+800C 8000            FCB $80,$00 *hola como estas
+                *Extendido
+                     ADCA 
+                          ^005 INSTRUCCIÓN CARECE DE OPERANDOS
+                     ASR  SHUAIN
+                          ^002 VARIABLE INEXISTENTE
+                     BITA $BB000
+                          ^007 MAGNITUD DE OPERANDO ERRÓNEA
+                     CPD  66000
+                          ^007 MAGNITUD DE OPERANDO ERRÓNEA
+                *Indexado X,Y
+                     LDAA $450,Y *Hola
+                          ^007 MAGNITUD DE OPERANDO ERRÓNEA
+                     ADDB 
+                          ^005 INSTRUCCIÓN CARECE DE OPERANDOS
+                     BITA $JORGE,X
+                          ^007 MAGNITUD DE OPERANDO ERRÓNEA
+800C 1860F5          NEG  $F5,y
+     
+     8000            ORG  $8000
+8000 8000       RESET FCB $80,$00
+
+                     END   $8000
