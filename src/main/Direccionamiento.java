@@ -52,7 +52,7 @@ public abstract class Direccionamiento extends Linea{
             return new Inherente(linea,mnemonico);
         }
         
-        if(partes.length == 1){
+        if(partes.length == 1){ 
             int error = linea.indexOf(mnemonico)+mnemonico.length()+1;
             return new Linea(generarError(linea,5,error)); //Error carece de operando
         }
@@ -60,33 +60,66 @@ public abstract class Direccionamiento extends Linea{
         String operando = partes[1];
         Matcher indxM = Pattern.compile(",x|,X").matcher(operando);
         Matcher indyM = Pattern.compile(",y|,Y").matcher(operando);
-        Matcher dirM = Pattern.compile(",#").matcher(operando);
-        /*
+        Matcher dirM = Pattern.compile(",#,").matcher(operando);
         
-        if(mnemonico.toUpperCase() == "BRCLR" || mnemonico.toUpperCase() == "BRSET"){
+        //
+        //partes[0] -> MNEMONICO 
+        //partes[1] -> OPE,X,#NOD
+        //partes[2] -> ETIQUETA
+        
+        // mne ,x,#das
+        if(mnemonico.toUpperCase().equals("JMP")||mnemonico.toUpperCase().equals("JSR")){
+            return new Extendido(linea,mnemonico,operando,true);
+        }
+        if(mnemonico.toUpperCase().equals("BRCLR") || mnemonico.toUpperCase().equals("BRSET")){
             if(partes.length < 3)
-                return null; //Error carece de operando
-            if(indxM.find())
-                return new Indexado(linea,mnemonico,operando+" "+partes[2],true, "BR");
-            if(indyM.find())
-                return new Indexado(linea,mnemonico, operando+" "+partes[2],false,"BR");
-            if(dirM.find())
-                return new Directo(linea,mnemonico, operando+" "+partes[2], "BR");
+                return new Linea(generarError(linea,5,linea.indexOf(operando+operando.length()+1))); //Error carece de operando
+            
+            String etiqueta = partes[2];
+            //Si hay más de tres partes separadas por comas, lanzar "Identificador o argumento inesperado"
+            if(operando.contains(",X")||operando.contains(",x")){
+                if(operando.split(",").length<3)
+                    return new Linea(generarError(linea,5,linea.indexOf(operando))); //Error carece de operando
+                return new Relativo(linea,mnemonico,operando,etiqueta,1);
+            }
+            if(operando.contains(",y")||operando.contains(",Y")){
+                 if(operando.split(",").length<3)
+                    return new Linea(generarError(linea,5,linea.indexOf(operando))); //Error carece de operando
+                return new Relativo(linea,mnemonico, operando,etiqueta,2);
+            }
+            if(operando.contains(",#")){
+                if(operando.split(",").length < 2)
+                    return new Linea(generarError(linea,5,linea.indexOf(operando))); //Error carece de operando
+                return new Relativo(linea,mnemonico, operando,etiqueta, 3);
+            }
+            return null;
         }
         
-        if(mnemonico.toUpperCase() == "BCLR" || mnemonico.toUpperCase() == "BSET"){
-            if(partes.length < 3)
+        if(mnemonico.toUpperCase().equals("BCLR") || mnemonico.toUpperCase().equals("BSET")){
+            if(partes.length < 2)
                 return null; //Error carece de operando;
-            if(indxM.find())
-                return new Indexado(linea,mnemonico,operando,true, "B");
-            if(indyM.find())
-                return new Indexado(linea,mnemonico, operando,false,"B");
-            if(dirM.find())
-                return new Directo(linea,mnemonico, operando, "B");
-        }*/
+            if(operando.contains(",X")||operando.contains(",x")){
+                if(operando.split(",").length<3)
+                    return new Linea(generarError(linea,5,linea.indexOf(operando))); //Error carece de operando
+                return new Indexado(linea,mnemonico,operando.split(",")[0],operando.split(",")[2],true,true);
+            }
+            if(operando.contains(",y")||operando.contains(",Y")){
+                if(operando.split(",").length<3)
+                    return new Linea(generarError(linea,5,linea.indexOf(operando))); //Error carece de operando
+                return new Indexado(linea,mnemonico,operando.split(",")[0],operando.split(",")[2],false,true);
+            }
+            if(operando.contains(",#"))
+                return new Directo(linea, mnemonico, operando.split(",")[0], operando.split(",")[1]);
+        }
+        
+        //Extendidos con etiquetas como operandos
+        //   -JMP
+        //   - JSR
+        //   -
+        
         
         if(Relativo.contieneMne(mnemonico)){
-            return new Relativo(linea);
+            return new Relativo(linea,mnemonico,operando);
         }
        
         if(Indexado.contieneMneX(mnemonico) && indxM.find()){

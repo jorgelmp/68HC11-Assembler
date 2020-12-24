@@ -19,14 +19,15 @@ import javax.swing.JOptionPane;
  */
 public class Main {
     
-    private static int numeroLinea = 0;
-    private static String lineaActual = numeroLinea + " A";
+    private static int numeroLinea = 1;
     private static int direccionActual = 0;
     private static String direccionHex = "0";
     
     public static String nombreArchivoR = "";
     public static String nombreArchivoE = "";
+    public static String nombreArchivoF = "";
     public static int totalLinea = 0;
+    public static boolean segunda = false;
     public static boolean fin = false;
 
     /**
@@ -38,49 +39,7 @@ public class Main {
         //String[][] instruction = Serializador.abrirArreglo2("68HC11.ser");
         //FabricaHash fab = new FabricaHash(instruction);
         //String[][] mc68hc11 = datasheet.getSubExcel(145, 8, 8, 1);
-        //printStringArray(mc68hc11,145,8);
-        /*String var0 = "SHUAI EQU $0002";
-        Linea vart0 = Linea.getLineType(var0);
-        System.out.println(vart0.toPrintToFile());
-        String var = "JORGE EQU $200A*hello";
-        Linea vart = Linea.getLineType(var);
-        System.out.println(vart.toPrintToFile());
-        String org = "    ORG    $8000";
-        Linea lin0 = Linea.getLineType(org);
-        System.out.println(lin0.toPrintToFile());
-        String etiqueta = "MAIN   *main";
-        Linea lin = Linea.getLineType(etiqueta);
-        System.out.println(lin.toPrintToFile());
-        String ins = "     ldaa    JORGE    *hellooo";
-        Linea inst = Linea.getLineType(ins);
-        System.out.println(inst.toPrintToFile());
-        String i2 = "     ldaa    #JORGE    *helloo ";
-        Linea i2s = Linea.getLineType(i2);
-        System.out.println(i2s.toPrintToFile());
-        String i3 = "     ldaa    $B2   *hrl ,x";
-        Linea i3s = Linea.getLineType(i3);
-        System.out.println(i3s.toPrintToFile());
-        String i4 = "     ldaa    SHUAI,x      *joo #wqk";
-        Linea i4s = Linea.getLineType(i4);
-        System.out.println(i4s.toPrintToFile());
-        String i5 = "     ldaa    $20,Y   ";
-        Linea i5s = Linea.getLineType(i5);
-        System.out.println(i5s.toPrintToFile());
-        String i6 = "     asr     JORGE   ";
-        Linea i6s = Linea.getLineType(i6);
-        System.out.println(i6s.toPrintToFile());
-        String if6 = "     FCB $80,$00 *hola como estas   ";
-        Linea if6s = Linea.getLineType(if6);
-        System.out.println(if6s.toPrintToFile());
-        String ir6 = "RESET FCB $80,$A0   ";
-        Linea ir6s = Linea.getLineType(ir6);
-        System.out.println(ir6s.toPrintToFile());
-        String end = "    END    $8000";
-        Linea endo = Linea.getLineType(end);
-        System.out.println(endo.toPrintToFile());
-        
-        */
-                
+        //printStringArray(mc68hc11,145,8);         
         
         
         nombreArchivoR = JOptionPane.showInputDialog("Ingresar la ruta del archivo(*.ASC):");
@@ -88,8 +47,13 @@ public class Main {
         
         //cambia la terminacion del archivo de salida
         int longitud=nombreArchivoR.length();
-        nombreArchivoE = nombreArchivoR.substring(0, longitud-4)+".LST";
+        nombreArchivoE = nombreArchivoR.substring(0, longitud-4)+".txt";
+        nombreArchivoF = nombreArchivoR.substring(0, longitud-4)+".LST";
+
         File archivoE = new File(nombreArchivoE);
+        archivoE.deleteOnExit();
+        File archivoF = new File(nombreArchivoF);
+
         
         if(archivoR.exists()==true){//verifica que existe el archivo
             try {
@@ -114,16 +78,39 @@ public class Main {
                 System.out.println(lineaactual);
                 write.escribir(archivoE.getAbsolutePath(), lineaactual);
                 if(fin)
-                    break;
+                    break;   
            }
-            //podemos verificar aqui si la ultima linea es END
-
+           
             
+           segunda = !segunda;
+            //podemos verificar aqui si la ultima linea es END
             
         }else{
             JOptionPane.showMessageDialog(null, "No se encontro el archivo");
         }
-
+        System.out.println("\n\n\n");
+        try {
+                archivoF.createNewFile();// crea el archivo de salida
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null, "No se pudo crear el archivo");
+            }
+            
+            // Aqui empieza todo el proceso
+            
+        Leer read = new Leer();// para leer el archivo linea por linea
+        Leer read1 = new Leer();//para saber cuantos lineas hay en el archivo
+        Escribir write = new Escribir();
+        Linea actual;
+        totalLinea = read1.totalLineas(archivoE.getAbsolutePath());
+        String linea;
+        for(int i=1;i<=totalLinea;i++){
+            read.leer(archivoE.getAbsolutePath(),i);
+            linea = read.linea;
+            actual = Linea.getLineType(linea);
+            String lineaactual = actual.toPrintToFile();
+            System.out.println(lineaactual);
+            write.escribir(archivoF.getAbsolutePath(), lineaactual);
+        }
     }
     
     
@@ -145,13 +132,13 @@ public class Main {
         direccionHex = hex.toUpperCase();
     }
     
-    public String getLineNumber(){
-        String actual = lineaActual;
+    public static String getLineNumber(){
+        String actual = numeroLinea + " A ";
         numeroLinea += 1;
         return actual;
     }
     
-    public String aImprmir(String codigo){
+    public static String aImprmir(String codigo){
         return getLineNumber() + " " + codigo;
     }
         

@@ -7,16 +7,15 @@ package main;
 
 import herramientas.Serializador;
 import java.util.HashMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 /**
  *
  * @author jorge
  */
 public class Directo extends Direccionamiento{
     private static final HashMap<String,String> tabla = Serializador.abrirHashMapString2("Directos.ser");
-    private String especial = "";
+    private boolean especial = false;
+    private String operando1;
+    private String operando2;
     
     public Directo(String linea, String mne, String ope){
         super(linea);
@@ -25,30 +24,32 @@ public class Directo extends Direccionamiento{
         this.opcode = tabla.get(mnemonico.toLowerCase()).toUpperCase();
     }
     
-    public Directo(String linea, String mne, String ope, String isSpecial){
+    public Directo(String linea, String mne, String operando1, String operando2){
         super(linea);
         this.mnemonico = mne;
-        this.operando = ope;
-        this.especial = isSpecial;
+        this.operando1 = operando1;
+        this.operando2 = operando2;
+        this.especial = true;
         this.opcode = tabla.get(mnemonico.toLowerCase()).toUpperCase();
     }
     
     @Override
     public String toPrintToFile(){
         String aImprimir = "";
-        if(especial == "BR"){
-            String partes[] = operando.split(",| ");
-            String operando1 = operandoToHex(partes[0]);
-            String operando2 = operandoToHex(partes[1].substring(1));
-            String etiqueta = partes[2];
-            
+        if(especial){
+            int error1, error2;
+            error1 = linea.indexOf(operando1);
+            error2 = linea.indexOf(operando2);
+            operando1 = operandoToHex(operando1);
             if(operando1.length()>2)
-                return "Magnitud de operando erronea";
-            if(operando2.length()>2)
-                return "Magnitud de operando erronea";
-            if(!Etiqueta.contiene(etiqueta))
-                return "Etiqueta inexistente"; 
-            //caso $00,#$200 ETIQUETA?
+                return generarError(linea,7,error1);
+            operando2 = operandoToHex(operando2.substring(1));
+            if(operando2.length()>4)
+                return generarError(linea,7,error2);
+            aImprimir += Main.getAddress()+ " "+opcode+operando1+operando2;
+            updateAddress();
+            return aImprimir+getSpaceFor(aImprimir)+linea;
+            
         }
    
         aImprimir = Main.getAddress() + " " + opcode + operando; 
@@ -66,6 +67,10 @@ public class Directo extends Direccionamiento{
     }
     
     private void updateAddress(){
+        if(especial){
+            Main.updateAddress(2+operando2.length()/2);
+            return;
+        }
         int add = opcode.length() + operando.length();
         if(add == 4)
             Main.updateAddress(2);

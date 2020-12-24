@@ -14,6 +14,7 @@ import java.util.HashMap;
  */
 public class Extendido extends Direccionamiento{
     private static final HashMap<String,String> tabla = Serializador.abrirHashMapString2("Extendidos.ser");
+    private boolean especial = false;
     
     public Extendido(String linea, String mne, String oper){
         super(linea);
@@ -22,9 +23,34 @@ public class Extendido extends Direccionamiento{
         this.opcode = tabla.get(mnemonico.toLowerCase()).toUpperCase();
     }
     
+    public Extendido(String linea, String mne, String etiqueta, boolean etiq){
+        super(linea);
+        this.mnemonico = mne;
+        this.operando = etiqueta;
+        this.opcode = tabla.get(mnemonico.toLowerCase()).toUpperCase();
+        this.especial = true;
+    }
+    
+    public Extendido(String linea, String etiqueta){
+        super(linea);
+        this.operando = etiqueta;
+    }
+    
     @Override
     public String toPrintToFile(){
-        String aImprimir = Main.getAddress() + " " + opcode + String.format("%04X", Integer.parseInt(operando,16)); 
+        if(Main.segunda){
+            if(!Etiqueta.contiene(operando))
+                return Main.getLineNumber()+linea+"\n"+Main.getLineNumber()+getSpace(linea.indexOf(operando))+getError(3); //Etiqueta inexistente
+            operando = Etiqueta.getEtiqueta(operando);
+            return Main.getLineNumber()+linea.substring(0, linea.indexOf("J"))+operando+linea.substring(linea.indexOf("J")+4);
+        }
+        String aImprimir = Main.getAddress();
+        if(especial){
+            aImprimir += " "+opcode+"JJJJ";
+            Main.updateAddress(3);
+            return aImprimir + getSpaceFor(aImprimir) + linea;
+        }
+        aImprimir = Main.getAddress() + " " + opcode + String.format("%04X", Integer.parseInt(operando,16)); 
         updateAddress();
         return aImprimir + getSpaceFor(aImprimir)+linea;    
     }    

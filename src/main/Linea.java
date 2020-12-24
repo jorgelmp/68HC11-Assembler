@@ -12,7 +12,6 @@ public class Linea{
     String linea;
     String comentario;
     String aux;
-    int error = 0;
     
     private static final int DEFAULT  = 16;
     private static String espacio = new String(new char[DEFAULT]).replace('\0', ' ');
@@ -32,8 +31,31 @@ public class Linea{
             this.aux = comentario.isEmpty()? linea : retrieveComment(linea);
         }
     }
-   
-    public static Linea getLineType(String linea){    
+
+    public static Linea getLineType(String linea){
+        if(Main.segunda){
+            Matcher relativo = Pattern.compile("\\p{XDigit}{4} +\\p{XDigit}{2}GG +\\p{Alpha}{3,4} +[^ *]+( \\+.*)?$").matcher(linea);
+            Matcher especial = Pattern.compile("\\p{XDigit}{4} +(\\p{XDigit}{6,10})GG +(BRCLR|BRSET) +\\$\\p{XDigit}{2}\\,((X|Y|x|y)\\,)?#(\\$\\p{XDigit}{2,4}|\\p{Digit}+?|'\\p{ASCII}) +[^ *]+( \\+.*)?$").matcher(linea);
+            Matcher extespecial = Pattern.compile("\\p{XDigit}{4} +\\p{XDigit}{2}+JJJJ +(JMP|JSR) +[^ *]+ *(\\*+.*$)?").matcher(linea);
+            if(relativo.matches()){ // 8000 3242321           Mnemonico etiqueta * comentario 
+                String [] partes = linea.split(" +");
+                String direccion = partes[0];
+                String etiqueta = partes[3];
+                return new Relativo(linea, direccion,etiqueta, partes[1].length()/2);
+                }
+            else if(especial.matches()){ //8000 3242321           Mnemonico ope,x,y etiqueta * comentario
+                String [] partes = linea.split(" +");
+                String direccion = partes[0];
+                String etiqueta = partes[4];
+                return new Relativo(linea, direccion, etiqueta,  partes[1].length()/2);
+            }
+            else if(extespecial.matches()){
+                String[] partes = linea.split(" +");
+                String etiqueta = partes[3];
+                return new Extendido(linea,etiqueta);
+            }
+            return new Linea(Main.getLineNumber()+linea);
+        }
         if(esVacia(linea)){
             return new Linea(linea);
         }
@@ -134,6 +156,32 @@ public class Linea{
         return linea;
     }
     
+    static String getError(int error){
+         switch(error){
+            case 1:
+                return "^001 CONSTANTE INEXISTENTE";
+            case 2:
+                return "^002 VARIABLE INEXISTENTE";
+            case 3:
+                return "^003 ETIQUETA INEXISTENTE";
+            case 4:
+                return "^004 MNEMONICO INEXISTENTE";
+            case 5:
+                return "^005 INSTRUCCIÓN CARECE DE OPERANDOS";
+            case 6:
+                return "^006 INSTRUCCIÓN NO LLEVA OPERANDOS";
+            case 7:
+                return "^007 MAGNITUD DE OPERANDO ERRÓNEA";
+            case 8:
+                return "^008 SALTO RELATIVO MUY LEJANO ";
+            case 9:
+                return "^009 INSTRUCCIÓN CARECE DE AL MENOS UN ESPACIO RELATIVO AL MARGEN";
+            case 10:
+                return "^010 NO SE ENCUENTRA END";
+            default:
+                return "";
+        }
+    }
     static String generarError(String linea, int cual, int donde){
         String error;
         switch(cual){
@@ -171,7 +219,6 @@ public class Linea{
                 return "";
         }
         return getSpace()+linea+"\n"+getSpace()+getSpace(donde)+ error;
-        
     }
     public static String getSpace(){
         return espacio;

@@ -15,8 +15,10 @@ import java.util.regex.Pattern;
  * @author jorge
  */
 public class Indexado extends Direccionamiento{
+    private String operando1;
+    private String operando2;
     private boolean x = false;
-    private String especial = "";
+    private boolean especial = false;
     private static final HashMap<String,String> tablaX = Serializador.abrirHashMapString2("IndexadosX.ser");
     private static final HashMap<String,String> tablaY = Serializador.abrirHashMapString2("IndexadosY.ser");
     
@@ -28,22 +30,33 @@ public class Indexado extends Direccionamiento{
         this.opcode = x?  tablaX.get(mnemonico.toLowerCase()).toUpperCase() : tablaY.get(mnemonico.toLowerCase()).toUpperCase();
     }
     
-    public Indexado(String linea, String mnemonico, String operando, boolean isX, String isSpecial){
+    public Indexado(String linea, String mnemonico, String operando1, String operando2, boolean isX, boolean isSpecial){
         super(linea);
         this.mnemonico = mnemonico;
-        this.operando = operando;
+        this.operando1 = operando1;
+        this.operando2 = operando2;                
         this.x = isX;
         especial = isSpecial;
-        this.opcode = x?  tablaX.get(mnemonico).toUpperCase() : tablaY.get(mnemonico).toUpperCase();
+        this.opcode = x?  tablaX.get(mnemonico.toLowerCase()).toUpperCase() : tablaY.get(mnemonico.toLowerCase()).toUpperCase();
     }
     
     @Override
     public String toPrintToFile(){
         String aImprimir="";
-        if(especial=="BR")
-        {
-            
-        } 
+        if(especial){
+            int error1, error2;
+            error1 = linea.indexOf(operando1);
+            error2 = linea.indexOf(operando2);
+            operando1 = operandoToHex(operando1);
+            operando2 = operandoToHex(operando2.substring(1));
+            if(operando1.length()>2)
+                return generarError(linea,7,error1);
+            if(operando2.length()>4)
+                return generarError(linea,7,error2);
+            aImprimir+=Main.getAddress() + " "+opcode+operando1+operando2;
+            updateAddress();
+            return aImprimir+= getSpaceFor(aImprimir) + linea;
+        }
         operando = operando.split(",")[0];
         int error = linea.indexOf(operando);
         operandoToHex();
@@ -74,6 +87,12 @@ public class Indexado extends Direccionamiento{
     }
     
     private void updateAddress(){
+        if(especial){
+            if(x)
+                Main.updateAddress(2 + operando2.length()/2 );
+            else
+                Main.updateAddress(3 + operando2.length()/2);
+        }
         if(opcode.length() == 2)
             Main.updateAddress(2);
         else if(opcode.length() == 4)

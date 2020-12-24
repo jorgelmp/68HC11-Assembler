@@ -44,7 +44,7 @@ public class Inmediato extends Direccionamiento{
     
     private void updateAddress(){
         int add = opcode.length() + operando.length();
-        
+ 
         if(add == 4)
             Main.updateAddress(2);
         else if(add == 6)
