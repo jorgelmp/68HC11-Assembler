@@ -28,6 +28,8 @@ public class Extendido extends Direccionamiento{
         this.mnemonico = mne;
         this.operando = etiqueta;
         this.opcode = tabla.get(mnemonico.toLowerCase()).toUpperCase();
+        String format = (opcode.length()<3)? "%02X" : "%04X";
+        this.opcode = String.format(format, Integer.parseInt(opcode,16));
         this.especial = true;
     }
     

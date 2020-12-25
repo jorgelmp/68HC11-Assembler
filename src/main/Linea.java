@@ -28,28 +28,31 @@ public class Linea{
         this.linea = linea;
         if(!linea.contains("^")){
             this.comentario = getComment(linea);
-            this.aux = comentario.isEmpty()? linea : retrieveComment(linea);
+            this.aux = comentario.isEmpty()? linea.trim() : retrieveComment(linea).trim();
         }
     }
 
     public static Linea getLineType(String linea){
         if(Main.segunda){
-            Matcher relativo = Pattern.compile("\\p{XDigit}{4} +\\p{XDigit}{2}GG +\\p{Alpha}{3,4} +[^ *]+( \\+.*)?$").matcher(linea);
-            Matcher especial = Pattern.compile("\\p{XDigit}{4} +(\\p{XDigit}{6,10})GG +(BRCLR|BRSET) +\\$\\p{XDigit}{2}\\,((X|Y|x|y)\\,)?#(\\$\\p{XDigit}{2,4}|\\p{Digit}+?|'\\p{ASCII}) +[^ *]+( \\+.*)?$").matcher(linea);
+            Matcher relativo = Pattern.compile("\\p{XDigit}{4} +\\p{XDigit}{2}GG +\\p{Alpha}{3,4} +[^ *]+ *(\\*+.*)?$").matcher(linea);
+            Matcher especial = Pattern.compile("\\p{XDigit}{4} +(\\p{XDigit}{6,10})GG +(BRCLR|BRSET) +\\$\\p{XDigit}{2}\\,((X|Y|x|y)\\,)?#(\\$\\p{XDigit}{2,4}|\\p{Digit}+?|'\\p{ASCII}) +[^ *]+ *(\\*+.*)?$").matcher(linea);
             Matcher extespecial = Pattern.compile("\\p{XDigit}{4} +\\p{XDigit}{2}+JJJJ +(JMP|JSR) +[^ *]+ *(\\*+.*$)?").matcher(linea);
             if(relativo.matches()){ // 8000 3242321           Mnemonico etiqueta * comentario 
+                System.out.println("Here");
                 String [] partes = linea.split(" +");
                 String direccion = partes[0];
                 String etiqueta = partes[3];
                 return new Relativo(linea, direccion,etiqueta, partes[1].length()/2);
                 }
             else if(especial.matches()){ //8000 3242321           Mnemonico ope,x,y etiqueta * comentario
+                System.out.println("There");
                 String [] partes = linea.split(" +");
                 String direccion = partes[0];
                 String etiqueta = partes[4];
                 return new Relativo(linea, direccion, etiqueta,  partes[1].length()/2);
             }
             else if(extespecial.matches()){
+                System.out.println("And everywhere");
                 String[] partes = linea.split(" +");
                 String etiqueta = partes[3];
                 return new Extendido(linea,etiqueta);

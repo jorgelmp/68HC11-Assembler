@@ -18,9 +18,11 @@ public class Etiqueta extends Linea {
     
     public Etiqueta(String linea){
         super(linea);
+        String[] partes = aux.split(" +");
+        this.linea = partes[0] + getSpace(42 - partes[0].length())+comentario;
         this.etiqueta = aux.trim();
         this.direccion = Main.getAddress(); 
-        this.etiquetas.put(etiqueta,direccion);
+        this.etiquetas.put(etiqueta,String.format("%04X", Integer.parseInt(direccion,16)));
     }
     
     public static boolean contiene(String nombre){

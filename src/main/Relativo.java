@@ -27,6 +27,7 @@ public class Relativo extends Direccionamiento{
         this.mnemonico = mnemonico;
         this.operando =operando;
         this.opcode = tabla.get(mnemonico.toLowerCase()).toUpperCase();
+        this.opcode = String.format("%02X", Integer.parseInt(opcode, 16));
         
     }
     
@@ -101,6 +102,9 @@ public class Relativo extends Direccionamiento{
             if(operando2.length()>4)
                 return generarError(linea,7,error);
             
+            operando1 = String.format("%02X", Integer.parseInt(operando1,16));
+            String format = (operando2.length()<3)? "%02X" : "%04X";
+            operando2 = String.format(format, Integer.parseInt(operando2,16));
             int add = (tipo == 2)? 4 + updateAddress(operando2)  :  3 + updateAddress(operando2);
             Main.updateAddress(add);
             aImprimir+= opcode + operando1 + operando2 + "GG";

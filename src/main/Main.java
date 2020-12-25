@@ -133,7 +133,7 @@ public class Main {
     }
     
     public static String getLineNumber(){
-        String actual = numeroLinea + " A ";
+        String actual = " "+Linea.getSpace(String.valueOf(totalLinea*2).length()-String.valueOf(numeroLinea).length())+numeroLinea + " A ";
         numeroLinea += 1;
         return actual;
     }

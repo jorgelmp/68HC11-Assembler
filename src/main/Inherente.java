@@ -18,7 +18,10 @@ public class Inherente extends Direccionamiento{
     public Inherente(String linea, String mnemonico){
         super(linea);
         this.mnemonico = mnemonico;
-        this.opcode = tabla.get(mnemonico.toLowerCase());        
+        this.opcode = tabla.get(mnemonico.toLowerCase());
+        String format = (opcode.length()<3)? "%02X" : "%04X";
+        this.opcode = String.format(format, Integer.parseInt(opcode,16));
+        
     }
     
     @Override

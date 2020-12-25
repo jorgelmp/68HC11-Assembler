@@ -22,6 +22,8 @@ public class Directo extends Direccionamiento{
         this.mnemonico = mne;
         this.operando = ope;
         this.opcode = tabla.get(mnemonico.toLowerCase()).toUpperCase();
+        String format = (opcode.length()<3)? "%02X" : "%04X";
+        this.opcode = String.format(format, Integer.parseInt(opcode,16));    
     }
     
     public Directo(String linea, String mne, String operando1, String operando2){
@@ -31,6 +33,8 @@ public class Directo extends Direccionamiento{
         this.operando2 = operando2;
         this.especial = true;
         this.opcode = tabla.get(mnemonico.toLowerCase()).toUpperCase();
+        String format = (opcode.length()<3)? "%02X" : "%04X";
+        this.opcode = String.format(format, Integer.parseInt(opcode,16));
     }
     
     @Override
@@ -46,6 +50,9 @@ public class Directo extends Direccionamiento{
             operando2 = operandoToHex(operando2.substring(1));
             if(operando2.length()>4)
                 return generarError(linea,7,error2);
+            operando1 = String.format("%02X", Integer.parseInt(operando1,16));
+            String format = (operando2.length()<3)? "%02X" : "%04X";
+            operando2 = String.format(format, Integer.parseInt(operando2,16));
             aImprimir += Main.getAddress()+ " "+opcode+operando1+operando2;
             updateAddress();
             return aImprimir+getSpaceFor(aImprimir)+linea;

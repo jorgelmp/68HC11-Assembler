@@ -21,14 +21,15 @@ public class Inmediato extends Direccionamiento{
         super(linea);
         this.mnemonico = mnemonico;
         this.operando = operando.substring(1);
-        this.opcode = tabla.get(mnemonico.toLowerCase()).toUpperCase();   
+        this.opcode = tabla.get(mnemonico.toLowerCase()).toUpperCase();
+        String format = (opcode.length()<3)? "%02X" : "%04X";
+        this.opcode = String.format(format, Integer.parseInt(opcode,16));
     }
     
     @Override
     public String toPrintToFile(){
         int  error = linea.indexOf(operando);
         operando = operandoToHex(operando);
-        
         if(operando.isEmpty()){
             return generarError(linea,1,error); //Constante inexistente
         }
@@ -36,7 +37,7 @@ public class Inmediato extends Direccionamiento{
         if(operando.length()>4){            
             return generarError(linea,7,error); //Magnitud de operando errónea;
         }
-        
+        operando = (operando.length()<3)? String.format("%02X", Integer.parseInt(operando,16)): String.format("%04X", Integer.parseInt(operando,16));
         String aImprimir = Main.getAddress() + " " + opcode + operando;        
         updateAddress();
         return aImprimir + getSpaceFor(aImprimir) + linea;

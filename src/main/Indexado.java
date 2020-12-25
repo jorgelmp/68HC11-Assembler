@@ -28,6 +28,9 @@ public class Indexado extends Direccionamiento{
         this.operando = operando;
         this.x = isX;
         this.opcode = x?  tablaX.get(mnemonico.toLowerCase()).toUpperCase() : tablaY.get(mnemonico.toLowerCase()).toUpperCase();
+        String format = (opcode.length()<3)? "%02X" : "%04X";
+        this.opcode = String.format(format, Integer.parseInt(opcode,16));
+        
     }
     
     public Indexado(String linea, String mnemonico, String operando1, String operando2, boolean isX, boolean isSpecial){
@@ -38,6 +41,9 @@ public class Indexado extends Direccionamiento{
         this.x = isX;
         especial = isSpecial;
         this.opcode = x?  tablaX.get(mnemonico.toLowerCase()).toUpperCase() : tablaY.get(mnemonico.toLowerCase()).toUpperCase();
+        String format = (opcode.length()<3)? "%02X" : "%04X";
+        this.opcode = String.format(format, Integer.parseInt(opcode,16));
+        
     }
     
     @Override
@@ -88,10 +94,12 @@ public class Indexado extends Direccionamiento{
     
     private void updateAddress(){
         if(especial){
+            int add = (operando2.length()  < 3)? 1:2;
             if(x)
-                Main.updateAddress(2 + operando2.length()/2 );
+                Main.updateAddress(2 + add );
             else
-                Main.updateAddress(3 + operando2.length()/2);
+                Main.updateAddress(3 + add);
+            return;
         }
         if(opcode.length() == 2)
             Main.updateAddress(2);

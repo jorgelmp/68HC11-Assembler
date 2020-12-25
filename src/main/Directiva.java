@@ -14,8 +14,23 @@ public class Directiva extends Linea{
     String operando;
     String direccion;
     String reset;
+    
     public Directiva(String linea){
         super(linea);
+        String[] partes = aux.split(" +");
+        switch(partes.length){
+            case 1:
+                this.linea = getSpace(10)+partes[0]+getSpace(32-partes[0].length())+comentario;
+                break;
+            case 2:
+                this.linea = getSpace(10)+partes[0]+getSpace(10-partes[0].length())+partes[1]+getSpace(22-partes[1].length())+comentario;
+                break;
+            case 3:
+                this.linea = partes[0]+getSpace(10-partes[0].length())+partes[1]+getSpace(10-partes[1].length())+partes[2]+getSpace(22-partes[2].length())+comentario;
+                break;
+            default:
+                break;
+        }
         this.direccion = Main.getAddress();
     }
     
