@@ -5,9 +5,11 @@
  */
 package herramientas;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.HashMap;
@@ -40,13 +42,13 @@ public class Serializador {
         HashMap<String,String> map = null;
         try
         {
-            FileInputStream fi = new FileInputStream(filename);
-            ObjectInputStream oi = new ObjectInputStream(fi);
+            InputStream i = Serializador.class.getResourceAsStream(File.separator+"herramientas"+File.separator+filename);
+            ObjectInputStream oi = new ObjectInputStream(i);
   
             map = (HashMap<String,String>) oi.readObject();
             
             oi.close();
-            fi.close();
+            i.close();
             
             //System.out.println("HashMap de cadenas deserializado");
         }
@@ -60,6 +62,9 @@ public class Serializador {
             System.out.println("No se pudo deserializar el HashMap");
             System.out.println("ClassNotFoundException caught");
         }
+        catch(NullPointerException n){
+            System.out.println("fuck you");
+        }
         
         return map;
         
@@ -69,13 +74,13 @@ public class Serializador {
         HashSet<String> set = new HashSet<String>();
         try
         {
-            FileInputStream fi = new FileInputStream(filename);
-            ObjectInputStream oi = new ObjectInputStream(fi);
+            InputStream i = Serializador.class.getResourceAsStream(File.separator+"herramientas"+File.separator+filename);
+            ObjectInputStream oi = new ObjectInputStream(i);
   
             set = (HashSet<String>) oi.readObject();
             
             oi.close();
-            fi.close();
+            i.close();
             
             //System.out.println("HashSet de cadenas deserializado");
         }
@@ -89,6 +94,9 @@ public class Serializador {
             System.out.println("No se pudo deserializar el HashSet");
             System.out.println("ClassNotFoundException caught");
         }
+        catch(NullPointerException n){
+            System.out.println("you");
+        }
         
         return set;
     }
@@ -97,13 +105,13 @@ public class Serializador {
         String[][] arr = null;
         try
         {
-            FileInputStream f1 = new FileInputStream(filename);
-            ObjectInputStream o1 = new ObjectInputStream(f1);
+            InputStream i = Serializador.class.getResourceAsStream(filename);
+            ObjectInputStream o1 = new ObjectInputStream(i);
   
             arr = (String[][]) o1.readObject();
             
             o1.close();
-            f1.close();
+            i.close();
             
             //System.out.println("Arreglo bidimensional deserializado");
         }

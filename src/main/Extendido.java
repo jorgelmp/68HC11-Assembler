@@ -6,6 +6,7 @@
 package main;
 
 import herramientas.Serializador;
+import java.io.File;
 import java.util.HashMap;
 
 /**

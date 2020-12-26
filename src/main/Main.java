@@ -115,7 +115,7 @@ public class Main {
     
     
     public static String getAddress(){
-        return Integer.toHexString(direccionActual).toUpperCase();
+        return String.format("%04X",direccionActual);
     } 
     
     public static void updateAddress(int i){

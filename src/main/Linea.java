@@ -74,7 +74,23 @@ public class Linea{
                 return new Variable(linea);
             if(esDirectiva(linea))
                 return new Directiva(linea);
-            return new Linea(generarError(linea,9,0)); //Error carece de espacio relativo al margen
+            
+            String comentario = getComment(linea);
+            String[] partes = retrieveComment(linea).trim().split(" +");
+            
+            switch(partes.length){
+            case 1:
+                linea = partes[0]+getSpace(32-partes[0].length())+comentario;
+                return new Linea(generarError(linea,9,0));
+            case 2:
+                linea = partes[0]+getSpace(10-partes[0].length())+partes[1]+getSpace(22-partes[1].length())+comentario;
+                return new Linea(generarError(linea,9,0));
+            case 3:
+                linea = partes[0]+getSpace(10-partes[0].length())+partes[1]+" "+partes[2]+getSpace(22-partes[1].length()-1-partes[2].length())+comentario;
+                return new Linea(generarError(linea,9,0));
+            default:
+                return null; //Identificador inesperado
+            }
         }
         
         if(esDirectiva(linea))
@@ -186,42 +202,7 @@ public class Linea{
         }
     }
     static String generarError(String linea, int cual, int donde){
-        String error;
-        switch(cual){
-            case 1:
-                error= "^001 CONSTANTE INEXISTENTE";
-                break;
-            case 2:
-                error= "^002 VARIABLE INEXISTENTE";
-                break;
-            case 3:
-                error = "^003 ETIQUETA INEXISTENTE";
-                break;
-            case 4:
-                error = "^004 MNEMONICO INEXISTENTE";
-                break;
-            case 5:
-                error =  "^005 INSTRUCCIÓN CARECE DE OPERANDOS";
-                break;
-            case 6:
-                error = "^006 INSTRUCCIÓN NO LLEVA OPERANDOS";
-                break;
-            case 7:
-                error = "^007 MAGNITUD DE OPERANDO ERRÓNEA";
-                break;
-            case 8:
-                error = "^008 SALTO RELATIVO MUY LEJANO ";
-                break;
-            case 9:
-                error =  "^009 INSTRUCCIÓN CARECE DE AL MENOS UN ESPACIO RELATIVO AL MARGEN";
-                break;
-            case 10:
-                error = "^010 NO SE ENCUENTRA END";
-                break;
-            default:
-                return "";
-        }
-        return getSpace()+linea+"\n"+getSpace()+getSpace(donde)+ error;
+        return getSpace()+linea+"\n"+getSpace()+getSpace(donde)+ getError(cual);
     }
     public static String getSpace(){
         return espacio;

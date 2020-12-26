@@ -6,6 +6,7 @@
 package main;
 
 import herramientas.Serializador;
+import java.io.File;
 import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -31,7 +32,8 @@ public abstract class Direccionamiento extends Linea{
 
     public Direccionamiento(String linea){
         super(linea);
-        String partes[] = aux.split(" +");
+        String partes[] = aux.split(" +");/*
+                
         switch(partes.length){
             case 1:
                 this.linea = getSpace(10)+partes[0]+getSpace(32-partes[0].length())+comentario;
@@ -44,7 +46,7 @@ public abstract class Direccionamiento extends Linea{
                 break;
             default:
                 break;
-        }
+        }*/
         
     }
     
@@ -52,10 +54,24 @@ public abstract class Direccionamiento extends Linea{
         String aux = linea.contains("*")? retrieveComment(linea).trim() : linea.trim();
         String[] partes = aux.split(" +");
         String mnemonico = partes[0];
+        String comentario = getComment(linea);
+        switch(partes.length){
+            case 1:
+                linea = getSpace(10)+partes[0]+getSpace(32-partes[0].length())+" "+comentario;
+                break;
+            case 2:
+                linea = getSpace(10)+partes[0]+getSpace(10-partes[0].length())+partes[1]+getSpace(22-partes[1].length())+" "+comentario;
+                break;
+            case 3:
+                linea = getSpace(10)+partes[0]+getSpace(10-partes[0].length())+partes[1]+" "+partes[2]+getSpace(22-partes[1].length()-1-partes[2].length())+" "+comentario;
+            default:
+                break;
+        }
+
         
         if(!mneExists(mnemonico)){
-            int error = linea.indexOf(mnemonico);
-            return new Linea(generarError(linea,4,error)); //Error Mnemonico inexistente
+            return new Linea(generarError(linea,4,linea.indexOf(mnemonico)));
+
         }
         
         
