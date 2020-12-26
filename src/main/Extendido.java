@@ -6,13 +6,13 @@
 package main;
 
 import herramientas.Serializador;
-import java.io.File;
 import java.util.HashMap;
 
 /**
  *
  * @author jorge
  */
+
 public class Extendido extends Direccionamiento{
     private static final HashMap<String,String> tabla = Serializador.abrirHashMapString2("Extendidos.ser");
     private boolean especial = false;
@@ -49,11 +49,11 @@ public class Extendido extends Direccionamiento{
         }
         String aImprimir = Main.getAddress();
         if(especial){
-            aImprimir += " "+opcode+"JJJJ";
+            aImprimir += " "+opcode+" "+"JJJJ";
             Main.updateAddress(3);
             return aImprimir + getSpaceFor(aImprimir) + linea;
         }
-        aImprimir = Main.getAddress() + " " + opcode + String.format("%04X", Integer.parseInt(operando,16)); 
+        aImprimir = Main.getAddress() + " " + opcode+ " " + String.format("%04X", Integer.parseInt(operando,16)); 
         updateAddress();
         return aImprimir + getSpaceFor(aImprimir)+linea;    
     }    

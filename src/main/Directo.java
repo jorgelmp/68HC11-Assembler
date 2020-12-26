@@ -6,7 +6,6 @@
 package main;
 
 import herramientas.Serializador;
-import java.io.File;
 import java.util.HashMap;
 /**
  *
@@ -60,7 +59,7 @@ public class Directo extends Direccionamiento{
             
         }
    
-        aImprimir = Main.getAddress() + " " + opcode + operando; 
+        aImprimir = Main.getAddress() + " " + opcode +" "+ operando; 
         updateAddress();
         return aImprimir + getSpaceFor(aImprimir)+linea;
     }

@@ -6,7 +6,6 @@
 package main;
 
 import herramientas.Serializador;
-import java.io.File;
 import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

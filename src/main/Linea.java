@@ -16,14 +16,7 @@ public class Linea{
     private static final int DEFAULT  = 16;
     private static String espacio = new String(new char[DEFAULT]).replace('\0', ' ');
     
-/*
-    public static final int VACIA = 1;
-    public static final int COMENTARIO = 2;
-    public static final int DIRECTIVA = 3;
-    public static final int VARIABLE = 4;
-    public static final int ETIQUETA = 5;
-    public static final int DIRECCIONAMIENTO = 6;
-*/
+
     public Linea(String linea){
         this.linea = linea;
         if(!linea.contains("^")){
@@ -34,27 +27,24 @@ public class Linea{
 
     public static Linea getLineType(String linea){
         if(Main.segunda){
-            Matcher relativo = Pattern.compile("\\p{XDigit}{4} +\\p{XDigit}{2}GG +\\p{Alpha}{3,4} +[^ *]+ *(\\*+.*)?$").matcher(linea);
-            Matcher especial = Pattern.compile("\\p{XDigit}{4} +(\\p{XDigit}{6,10})GG +(BRCLR|BRSET) +\\$\\p{XDigit}{2}\\,((X|Y|x|y)\\,)?#(\\$\\p{XDigit}{2,4}|\\p{Digit}+?|'\\p{ASCII}) +[^ *]+ *(\\*+.*)?$").matcher(linea);
-            Matcher extespecial = Pattern.compile("\\p{XDigit}{4} +\\p{XDigit}{2}+JJJJ +(JMP|JSR) +[^ *]+ *(\\*+.*$)?").matcher(linea);
+            Matcher relativo = Pattern.compile("\\p{XDigit}{4} +\\p{XDigit}{2} +GG +\\p{Alpha}{3,4} +[^ *]+ *(\\*+.*)?$").matcher(linea);
+            Matcher especial = Pattern.compile("\\p{XDigit}{4} +\\p{XDigit}{2,4} +\\p{XDigit}{4,6}GG +(BRCLR|BRSET) +\\$\\p{XDigit}{2}\\,((X|Y|x|y)\\,)?#(\\$\\p{XDigit}{2,4}|\\p{Digit}+?|'\\p{ASCII}) +[^ *]+ *(\\*+.*)?$").matcher(linea);
+            Matcher extespecial = Pattern.compile("\\p{XDigit}{4} +\\p{XDigit}{2} +JJJJ +(JMP|JSR) +[^ *]+ *(\\*+.*$)?").matcher(linea);
             if(relativo.matches()){ // 8000 3242321           Mnemonico etiqueta * comentario 
-                System.out.println("Here");
-                String [] partes = linea.split(" +");
-                String direccion = partes[0];
-                String etiqueta = partes[3];
-                return new Relativo(linea, direccion,etiqueta, partes[1].length()/2);
-                }
-            else if(especial.matches()){ //8000 3242321           Mnemonico ope,x,y etiqueta * comentario
-                System.out.println("There");
                 String [] partes = linea.split(" +");
                 String direccion = partes[0];
                 String etiqueta = partes[4];
-                return new Relativo(linea, direccion, etiqueta,  partes[1].length()/2);
+                return new Relativo(linea, direccion,etiqueta, partes[1].length()/2);
+                }
+            else if(especial.matches()){ //8000 3242321           Mnemonico ope,x,y etiqueta * comentario
+                String [] partes = linea.split(" +");
+                String direccion = partes[0];
+                String etiqueta = partes[5];
+                return new Relativo(linea, direccion, etiqueta, (partes[1].length()+partes[2].length())/2);
             }
             else if(extespecial.matches()){
-                System.out.println("And everywhere");
                 String[] partes = linea.split(" +");
-                String etiqueta = partes[3];
+                String etiqueta = partes[4];
                 return new Extendido(linea,etiqueta);
             }
             return new Linea(Main.getLineNumber()+linea);

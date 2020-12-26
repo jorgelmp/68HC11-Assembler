@@ -6,7 +6,6 @@
 package main;
 
 import herramientas.Serializador;
-import java.io.File;
 import java.util.HashMap;
 
 /**
@@ -54,7 +53,7 @@ public class Relativo extends Direccionamiento{
                 return Main.getLineNumber() + linea + "\n"+Main.getLineNumber()+getSpace(linea.indexOf(etiqueta))+getError(3); //etiqueta inexistente
             }
             int salto = Integer.valueOf(Etiqueta.getEtiqueta(etiqueta),16) - Integer.valueOf(direccion,16) - siguiente;
-            if(salto>255){
+            if(Math.abs(salto)>255){
                 return Main.getLineNumber()+linea + "\n"+Main.getLineNumber()+getSpace(linea.indexOf(etiqueta))+getError(8); //salto relativo muy grande
             }
             String saltoHex = (salto>0)? String.format("%02X", salto) : String.format("%02X", 256+salto);
@@ -106,12 +105,12 @@ public class Relativo extends Direccionamiento{
             operando2 = String.format(format, Integer.parseInt(operando2,16));
             int add = (tipo == 2)? 4 + updateAddress(operando2)  :  3 + updateAddress(operando2);
             Main.updateAddress(add);
-            aImprimir+= opcode + operando1 + operando2 + "GG";
+            aImprimir+= opcode+ " "+ operando1 + operando2 + "GG";
             return aImprimir + getSpaceFor(aImprimir) + linea;
         }
         
         Main.updateAddress(2);
-        aImprimir+= opcode+"GG";
+        aImprimir+= opcode+" "+"GG";
         return aImprimir + getSpaceFor(aImprimir)+linea;
     }
     

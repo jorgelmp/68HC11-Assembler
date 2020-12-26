@@ -6,7 +6,6 @@
 package main;
 
 import herramientas.Serializador;
-import java.io.File;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -60,16 +59,16 @@ public class Indexado extends Direccionamiento{
                 return generarError(linea,7,error1);
             if(operando2.length()>4)
                 return generarError(linea,7,error2);
-            aImprimir+=Main.getAddress() + " "+opcode+operando1+operando2;
+            aImprimir+=Main.getAddress() + " "+opcode+" "+operando1+operando2;
             updateAddress();
-            return aImprimir+= getSpaceFor(aImprimir) + linea;
+            return getSpaceFor(aImprimir) + linea;
         }
         operando = operando.split(",")[0];
         int error = linea.indexOf(operando);
         operandoToHex();
         if(operando.length()>2)
             return generarError(linea,7,error); //Magnitud de operando erronea
-        aImprimir += Main.getAddress() + " " + opcode + operando;
+        aImprimir += Main.getAddress() + " " + opcode+" "+ operando;
         updateAddress();
             
         return aImprimir + getSpaceFor(aImprimir) + linea;
