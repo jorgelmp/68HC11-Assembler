@@ -30,22 +30,32 @@ public class Linea{
             Matcher relativo = Pattern.compile("\\p{XDigit}{4} +\\p{XDigit}{2} +GG +\\p{Alpha}{3,4} +[^ *]+ *(\\*+.*)?$").matcher(linea);
             Matcher especial = Pattern.compile("\\p{XDigit}{4} +\\p{XDigit}{2,4} +\\p{XDigit}{4,6}GG +(BRCLR|BRSET) +\\$\\p{XDigit}{2}\\,((X|Y|x|y)\\,)?#(\\$\\p{XDigit}{2,4}|\\p{Digit}+?|'\\p{ASCII}) +[^ *]+ *(\\*+.*)?$").matcher(linea);
             Matcher extespecial = Pattern.compile("\\p{XDigit}{4} +\\p{XDigit}{2} +JJJJ +(JMP|JSR) +[^ *]+ *(\\*+.*$)?").matcher(linea);
+            Matcher direccionReg = Pattern.compile("\\p{XDigit}{4} \\p{XDigit}{2,4} \\p{XDigit}* *.*$").matcher(linea);
+            Matcher org = Pattern.compile("     \\p{XDigit}{4} +ORG +\\$\\p{XDigit}{4} *(\\*+.*$)?$").matcher(linea);
             if(relativo.matches()){ // 8000 3242321           Mnemonico etiqueta * comentario 
                 String [] partes = linea.split(" +");
                 String direccion = partes[0];
                 String etiqueta = partes[4];
                 return new Relativo(linea, direccion,etiqueta, partes[1].length()/2);
+                
                 }
             else if(especial.matches()){ //8000 3242321           Mnemonico ope,x,y etiqueta * comentario
                 String [] partes = linea.split(" +");
                 String direccion = partes[0];
                 String etiqueta = partes[5];
-                return new Relativo(linea, direccion, etiqueta, (partes[1].length()+partes[2].length())/2);
+                Relativo re =  new Relativo(linea, direccion, etiqueta, (partes[1].length()+partes[2].length())/2);
+                return re;
             }
             else if(extespecial.matches()){
                 String[] partes = linea.split(" +");
                 String etiqueta = partes[4];
                 return new Extendido(linea,etiqueta);
+            }
+            else if(direccionReg.matches()){
+                return new Direccionamiento(Main.getLineNumber()+linea, linea.split(" ")[1], linea.split(" ")[2]);
+            }
+            else if(org.matches()){
+                return new Directiva(Main.getLineNumber()+linea);
             }
             return new Linea(Main.getLineNumber()+linea);
         }
@@ -166,6 +176,8 @@ public class Linea{
     }
     
     static String getError(int error){
+        if(!Main.error)
+            Main.error = true;
          switch(error){
             case 1:
                 return "^001 CONSTANTE INEXISTENTE";

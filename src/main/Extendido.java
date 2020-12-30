@@ -45,6 +45,7 @@ public class Extendido extends Direccionamiento{
             if(!Etiqueta.contiene(operando))
                 return Main.getLineNumber()+linea+"\n"+Main.getLineNumber()+getSpace(linea.indexOf(operando))+getError(3); //Etiqueta inexistente
             operando = Etiqueta.getEtiqueta(operando);
+            opcode = linea.split(" ")[1];
             return Main.getLineNumber()+linea.substring(0, linea.indexOf("J"))+operando+linea.substring(linea.indexOf("J")+4);
         }
         String aImprimir = Main.getAddress();

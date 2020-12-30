@@ -37,7 +37,7 @@ public class Inmediato extends Direccionamiento{
             return generarError(linea,7,error); //Magnitud de operando errónea;
         }
         operando = (operando.length()<3)? String.format("%02X", Integer.parseInt(operando,16)): String.format("%04X", Integer.parseInt(operando,16));
-        String aImprimir = Main.getAddress() + " " + opcode +  " " + operando;        
+        String aImprimir = Main.getAddress() + " " + opcode + " " + operando;        
         updateAddress();
         return aImprimir + getSpaceFor(aImprimir) + linea;
     }

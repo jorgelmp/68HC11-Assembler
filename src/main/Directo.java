@@ -53,7 +53,8 @@ public class Directo extends Direccionamiento{
             operando1 = String.format("%02X", Integer.parseInt(operando1,16));
             String format = (operando2.length()<3)? "%02X" : "%04X";
             operando2 = String.format(format, Integer.parseInt(operando2,16));
-            aImprimir += Main.getAddress()+ " "+opcode+operando1+operando2;
+            operando = operando1+operando2;
+            aImprimir += Main.getAddress()+" "+opcode+ " "+operando;
             updateAddress();
             return aImprimir+getSpaceFor(aImprimir)+linea;
             

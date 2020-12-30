@@ -42,8 +42,8 @@ public class Serializador {
         HashMap<String,String> map = null;
         try
         {
-            FileInputStream i = new FileInputStream(filename);
-            //InputStream i = Serializador.class.getResourceAsStream(File.separator+"herramientas"+File.separator+filename);
+            //FileInputStream i = new FileInputStream(filename);
+            InputStream i = Serializador.class.getResourceAsStream("/herramientas/"+filename);
             ObjectInputStream oi = new ObjectInputStream(i);
   
             map = (HashMap<String,String>) oi.readObject();
@@ -75,8 +75,8 @@ public class Serializador {
         HashSet<String> set = new HashSet<String>();
         try
         {
-            FileInputStream i = new FileInputStream(filename);
-            //InputStream i = Serializador.class.getResourceAsStream(File.separator+"herramientas"+File.separator+filename);
+            //FileInputStream i = new FileInputStream(filename);
+            InputStream i = Serializador.class.getResourceAsStream("/herramientas/"+filename);
             ObjectInputStream oi = new ObjectInputStream(i);
   
             set = (HashSet<String>) oi.readObject();
@@ -107,8 +107,7 @@ public class Serializador {
         String[][] arr = null;
         try
         {
-            FileInputStream i = new FileInputStream(filename);
-            //InputStream i = Serializador.class.getResourceAsStream(filename);
+            InputStream i = Serializador.class.getResourceAsStream("/herramientas/"+filename);
             ObjectInputStream o1 = new ObjectInputStream(i);
   
             arr = (String[][]) o1.readObject();

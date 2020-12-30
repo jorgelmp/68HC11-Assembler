@@ -57,7 +57,11 @@ public class Relativo extends Direccionamiento{
                 return Main.getLineNumber()+linea + "\n"+Main.getLineNumber()+getSpace(linea.indexOf(etiqueta))+getError(8); //salto relativo muy grande
             }
             String saltoHex = (salto>0)? String.format("%02X", salto) : String.format("%02X", 256+salto);
-            return Main.getLineNumber()+linea.substring(0,linea.indexOf("G"))+ saltoHex.toUpperCase() +linea.substring(linea.indexOf("G")+2);
+            
+            String re = linea.substring(0,linea.indexOf("G"))+ saltoHex.toUpperCase() + linea.substring(linea.indexOf("G")+2);
+            opcode = re.split(" ")[1];
+            operando = re.split(" ")[2];
+            return Main.getLineNumber() + re;
         }
             
         String aImprimir = Main.getAddress()+" ";
@@ -105,7 +109,8 @@ public class Relativo extends Direccionamiento{
             operando2 = String.format(format, Integer.parseInt(operando2,16));
             int add = (tipo == 2)? 4 + updateAddress(operando2)  :  3 + updateAddress(operando2);
             Main.updateAddress(add);
-            aImprimir+= opcode+ " "+ operando1 + operando2 + "GG";
+            operando = operando1+operando2;
+            aImprimir+= opcode+ " "+ operando + "GG";
             return aImprimir + getSpaceFor(aImprimir) + linea;
         }
         

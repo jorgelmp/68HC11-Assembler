@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
  *
  * @author jorge
  */
-public abstract class Direccionamiento extends Linea{
+public class Direccionamiento extends Linea{
     String mnemonico;
     String opcode;
     String operando;
@@ -31,22 +31,11 @@ public abstract class Direccionamiento extends Linea{
 
     public Direccionamiento(String linea){
         super(linea);
-        String partes[] = aux.split(" +");/*
-                
-        switch(partes.length){
-            case 1:
-                this.linea = getSpace(10)+partes[0]+getSpace(32-partes[0].length())+comentario;
-                break;
-            case 2:
-                this.linea = getSpace(10)+partes[0]+getSpace(10-partes[0].length())+partes[1]+getSpace(22-partes[1].length())+comentario;
-                break;
-            case 3:
-                this.linea = getSpace(10)+partes[0]+getSpace(10-partes[0].length())+partes[1]+" "+partes[2]+getSpace(22-partes[1].length()-1-partes[2].length())+comentario;
-                break;
-            default:
-                break;
-        }*/
-        
+    }
+    public Direccionamiento(String linea, String opcode, String operando){
+        super(linea);
+        this.opcode = opcode;
+        this.operando = operando;
     }
     
     public static Linea getLineType(String linea){
@@ -227,6 +216,14 @@ public abstract class Direccionamiento extends Linea{
     
     public static boolean mneExists(String mne){
         return mnemonicos.contains(mne.toLowerCase());
+    }
+    
+    public String getOpcode(){
+        return opcode;
+    }
+    
+    public String getOperando(){
+        return operando;
     }
     
    

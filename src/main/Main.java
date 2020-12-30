@@ -1,17 +1,8 @@
 package main;
 import herramientas.*;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.ObjectInputStream;
-import java.lang.ClassNotFoundException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
 import javax.swing.JOptionPane;
 /**
  *
@@ -29,6 +20,7 @@ public class Main {
     public static int totalLinea = 0;
     public static boolean segunda = false;
     public static boolean fin = false;
+    public static boolean error = false;
 
     /**
      * @param args the command line arguments
@@ -80,8 +72,9 @@ public class Main {
                 if(fin)
                     break;   
            }
+           if(!fin)
+               write.escribir(archivoE.getAbsolutePath(), Linea.getSpace()+Linea.getError(10));
            
-            
            segunda = !segunda;
             //podemos verificar aqui si la ultima linea es END
             
@@ -102,14 +95,30 @@ public class Main {
         Escribir write = new Escribir();
         Linea actual;
         totalLinea = read1.totalLineas(archivoE.getAbsolutePath());
+        try{
+            S19generator sninet = new S19generator(nombreArchivoR.substring(0, longitud-4)+".S19",!error);
         String linea;
         for(int i=1;i<=totalLinea;i++){
+            Direccionamiento dir;
+            Directiva org;
             read.leer(archivoE.getAbsolutePath(),i);
             linea = read.linea;
             actual = Linea.getLineType(linea);
             String lineaactual = actual.toPrintToFile();
             System.out.println(lineaactual);
+            if(actual instanceof Direccionamiento){
+                dir = (Direccionamiento) actual;
+                sninet.buildLine(dir.getOpcode(), dir.getOperando(), !error);
+            }
+            else if(actual instanceof Directiva){
+                org = (Directiva) actual;
+                sninet.buildLine(org.getOperando(), !error);
+            }
             write.escribir(archivoF.getAbsolutePath(), lineaactual);
+        }
+        sninet.end();
+        }catch(IOException e){
+            System.out.println("Error de IO");
         }
     }
     

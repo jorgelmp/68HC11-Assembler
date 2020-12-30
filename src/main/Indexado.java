@@ -59,9 +59,10 @@ public class Indexado extends Direccionamiento{
                 return generarError(linea,7,error1);
             if(operando2.length()>4)
                 return generarError(linea,7,error2);
-            aImprimir+=Main.getAddress() + " "+opcode+" "+operando1+operando2;
+            operando = operando1+operando2;
+            aImprimir = Main.getAddress() + " "+opcode+" "+operando;
             updateAddress();
-            return getSpaceFor(aImprimir) + linea;
+            return aImprimir + getSpaceFor(aImprimir) + linea;
         }
         operando = operando.split(",")[0];
         int error = linea.indexOf(operando);
