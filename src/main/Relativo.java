@@ -53,7 +53,7 @@ public class Relativo extends Direccionamiento{
                 return Main.getLineNumber() + linea + "\n"+Main.getLineNumber()+getSpace(linea.indexOf(etiqueta))+getError(3); //etiqueta inexistente
             }
             int salto = Integer.valueOf(Etiqueta.getEtiqueta(etiqueta),16) - Integer.valueOf(direccion,16) - siguiente;
-            if(Math.abs(salto)>255){
+            if(salto > 128 || salto <-127){
                 return Main.getLineNumber()+linea + "\n"+Main.getLineNumber()+getSpace(linea.indexOf(etiqueta))+getError(8); //salto relativo muy grande
             }
             String saltoHex = (salto>0)? String.format("%02X", salto) : String.format("%02X", 256+salto);
