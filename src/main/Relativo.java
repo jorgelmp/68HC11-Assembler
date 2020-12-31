@@ -9,8 +9,9 @@ import herramientas.Serializador;
 import java.util.HashMap;
 
 /**
- *
- * @author jorge
+ * Clase cuyas instancias representan una instrucción en modo de direccionamien-
+ * to relativo.
+ * @author shuai
  */
 public class Relativo extends Direccionamiento{
     private static final HashMap<String,String> tabla = Serializador.abrirHashMapString2("Relativos.ser");
@@ -19,16 +20,31 @@ public class Relativo extends Direccionamiento{
     private int tipo;
     private int siguiente;
     private boolean especial=false;
-            
+    
+    /**
+     * Construye un objeto Relativo que representa una instrucción relativa en 
+     * la primera pasada, obtiene el opcode y le da formato.
+     * @param linea la línea original
+     * @param mnemonico el mnemónico
+     * @param operando  el operando
+     */
     public Relativo(String linea, String mnemonico, String operando){
         super(linea);
         this.mnemonico = mnemonico;
         this.operando =operando;
         this.opcode = tabla.get(mnemonico.toLowerCase()).toUpperCase();
         this.opcode = String.format("%02X", Integer.parseInt(opcode, 16));
-        
     }
     
+    /**
+     * Construye un objeto Relativo que representa una instrucción relativa en la
+     * segunda pasada.
+     * @param linea la línea original
+     * @param direccion la dirección de la línea original
+     * @param etiqueta la etiqueta operando cuyo valor hay que conocer
+     * @param siguiente la diferencia entre la dirección de la instrucción si-
+     * guiente y esta instrucción
+     */
     public Relativo(String linea, String direccion, String etiqueta, int siguiente){
         super(linea);
         this.direccion = direccion;
@@ -36,6 +52,15 @@ public class Relativo extends Direccionamiento{
         this.siguiente = siguiente;
     }
     
+    /**
+     * Construye un objeto Relativo que representa una caso especial (BRCLR o BR
+     * SET) de una instrucción relativa en la primera pasada.
+     * @param linea la línea original
+     * @param mnemonico el mnemónico
+     * @param operandos los operandos directo e inmediato
+     * @param etiqueta el operando etiqueta
+     * @param tipo el tipo de caso especial (1 - indexadoX, 2 - indexado Y, 3 - Directo)
+     */
     public Relativo(String linea, String mnemonico, String operandos,String etiqueta, int tipo){
         super(linea);
         this.mnemonico = mnemonico;
@@ -46,6 +71,12 @@ public class Relativo extends Direccionamiento{
         
     }
     
+    
+    /**
+     * Forma la cadena con la línea a imprimir en el archivo LST. En la segunda 
+     * pasada, sustituye la bandera GG por el valor correcto del operando.
+     * @return una cadena con la línea a imprimir en el LST 
+     */
     @Override
     public String toPrintToFile(){
         if(Main.segunda){
@@ -119,8 +150,11 @@ public class Relativo extends Direccionamiento{
         return aImprimir + getSpaceFor(aImprimir)+linea;
     }
     
+    /**
+     * Actualiza la dirección actual del programa en Main
+     * sujeto a la magnitud del operando.
+     */
     private int updateAddress(String operando){
-        
         int add = operando.length();
         
         if(add == 2)
@@ -130,10 +164,23 @@ public class Relativo extends Direccionamiento{
         
         return 0;
     }
+    
+    /**
+    * Para ser accedido desde otras partes del código.
+    * Revisa si existe una mnemonico en la tabla de relativos
+    * @param mne el mnemónico a buscar en la tabla
+    * @return true, si y sólo si, existe el mnemónico
+    */
     public static boolean contieneMne(String mne){
         return tabla.containsKey(mne.toLowerCase());
     }
     
+    /**
+    * Para ser accedido desde otras partes del código.
+    * Regresa el opcode de unaa instrucción en modo de direccionamiento relativo dado su mnemónico
+    * @param mne el mnemónico cuyo opcode se quiere obtener
+    * @return Una cadena con el opcode de la instrucción en hexadecimal a formato de dos dígitos
+    */
     public static String obtenOpcode(String mne){
         return tabla.get(mne.toLowerCase());
         
