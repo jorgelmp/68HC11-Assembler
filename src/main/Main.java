@@ -67,7 +67,7 @@ public class Main {
                 linea = read.linea;
                 actual = Linea.getLineType(linea);
                 String lineaactual = actual.toPrintToFile();
-                System.out.println(lineaactual);
+                //System.out.println(lineaactual);
                 write.escribir(archivoE.getAbsolutePath(), lineaactual);
                 if(fin)
                     break;   
@@ -95,28 +95,29 @@ public class Main {
         Escribir write = new Escribir();
         Linea actual;
         totalLinea = read1.totalLineas(archivoE.getAbsolutePath());
+        
         try{
-            S19generator sninet = new S19generator(nombreArchivoR.substring(0, longitud-4)+".S19",!error);
-        String linea;
-        for(int i=1;i<=totalLinea;i++){
-            Direccionamiento dir;
-            Directiva org;
-            read.leer(archivoE.getAbsolutePath(),i);
-            linea = read.linea;
-            actual = Linea.getLineType(linea);
-            String lineaactual = actual.toPrintToFile();
-            System.out.println(lineaactual);
-            if(actual instanceof Direccionamiento){
-                dir = (Direccionamiento) actual;
-                sninet.buildLine(dir.getOpcode(), dir.getOperando(), !error);
+            S19generator sninet = new S19generator(nombreArchivoR.substring(0, longitud-4),!error);
+            String linea;
+            for(int i=1;i<=totalLinea;i++){
+                Direccionamiento dir;
+                Directiva org;
+                read.leer(archivoE.getAbsolutePath(),i);
+                linea = read.linea;
+                actual = Linea.getLineType(linea);
+                String lineaactual = actual.toPrintToFile();
+                //System.out.println(lineaactual);
+                if(actual instanceof Direccionamiento){
+                    dir = (Direccionamiento) actual;
+                    sninet.buildLine(dir.getOpcode(), dir.getOperando(), !error);
+                }
+                else if(actual instanceof Directiva){
+                    org = (Directiva) actual;
+                    sninet.buildLine(org.getOperando(), !error);
+                }
+                write.escribir(archivoF.getAbsolutePath(), lineaactual);
             }
-            else if(actual instanceof Directiva){
-                org = (Directiva) actual;
-                sninet.buildLine(org.getOperando(), !error);
-            }
-            write.escribir(archivoF.getAbsolutePath(), lineaactual);
-        }
-        sninet.end();
+            sninet.end();
         }catch(IOException e){
             System.out.println("Error de IO");
         }
