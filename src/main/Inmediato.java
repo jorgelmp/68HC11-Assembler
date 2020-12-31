@@ -9,13 +9,19 @@ import herramientas.Serializador;
 import java.util.HashMap;
 
 /**
- *
- * @author Jesús
+ *Clase cuyas instancias representan una línea del modo de direccionamiento inmediato
+ * @author jesus
  */
 
 public class Inmediato extends Direccionamiento{
     private static final HashMap<String,String> tabla = Serializador.abrirHashMapString2("Inmediatos.ser");
     
+    /**
+     *Construye un objeto de Inmediato con la línea, el mnemónico y el operando dados
+     * @param linea línea con la instrucción de direccionamiento inmediato
+     * @param mnemonico mnemónico correspondiente a la instrucción ingresada
+     * @param operando operando de la instrucción
+     */
     public Inmediato(String linea,String mnemonico, String operando){
         super(linea);
         this.mnemonico = mnemonico;
@@ -26,6 +32,12 @@ public class Inmediato extends Direccionamiento{
     }
     
     @Override
+    /**
+     * Transforma el operando a formato hexadecimal y genera la línea del archivo de salida
+     * Si los operandos son del tamaño equivocado se lanza el error número siete
+     * Si el operando termina vacío se lanza el error número uno
+     * @return la línea modificada que se debe escribir en el archivo de salida
+     */
     public String toPrintToFile(){
         int  error = linea.indexOf(operando);
         operando = operandoToHex(operando);
@@ -41,7 +53,9 @@ public class Inmediato extends Direccionamiento{
         updateAddress();
         return aImprimir + getSpaceFor(aImprimir) + linea;
     }
-    
+    /**
+     * Actualiza la dirección de memoria sobre la cual se está trabajando
+     */
     private void updateAddress(){
         int add = opcode.length() + operando.length();
  
@@ -53,10 +67,20 @@ public class Inmediato extends Direccionamiento{
             Main.updateAddress(4);
     }
     
+    /**
+     *Verifica si el mnemónico existe
+     * @param mne mnemónico que se buscará en la tabla
+     * @return booleano que señala si se encontró el mnemónico o no
+     */
     public static boolean contieneMne(String mne){
         return tabla.containsKey(mne.toLowerCase());
     }
     
+    /**
+     *Obtiene el opcode del mnemónico ingresado
+     * @param mne mnemónico cuyo opcode se requiere
+     * @return cadena que contiene el opcode del mnemónico
+     */
     public static String obtenOpcode(String mne){
         return tabla.get(mne.toLowerCase());
         
