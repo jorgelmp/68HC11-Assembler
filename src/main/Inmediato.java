@@ -10,7 +10,7 @@ import java.util.HashMap;
 
 /**
  *
- * @author jorge
+ * @author Jesús
  */
 
 public class Inmediato extends Direccionamiento{
