@@ -7,7 +7,7 @@ package main;
 
 /**
  * Clase cuyas instancias representan uno de los cuatro casos de directivas aceptadas
- * @author jorge
+ * @author fercho
  */
 public class Directiva extends Linea{
     String directiva;
