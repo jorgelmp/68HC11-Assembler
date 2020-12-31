@@ -11,8 +11,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- *
- * @author jorge
+ *Clase cuyas instancias representan una línea del modo de direccionamiento indexado
+ * @author jesus
  */
 public class Indexado extends Direccionamiento{
     private String operando1;
@@ -22,6 +22,13 @@ public class Indexado extends Direccionamiento{
     private static final HashMap<String,String> tablaX = Serializador.abrirHashMapString2("IndexadosX.ser");
     private static final HashMap<String,String> tablaY = Serializador.abrirHashMapString2("IndexadosY.ser");
     
+    /**
+     *Construye un objeto de Indexado con la línea, el mnemónico, el operando y el registro dados
+     * @param linea línea con la instrucción de direccionamiento indexado
+     * @param mnemonico mnemónico correspondiente a la instrucción ingresada
+     * @param operando operando de la instrucción
+     * @param isX booleano que indica si se trabajará con el registro X
+     */
     public Indexado(String linea, String mnemonico, String operando, boolean isX){
         super(linea);
         this.mnemonico = mnemonico;
@@ -33,6 +40,15 @@ public class Indexado extends Direccionamiento{
         
     }
     
+    /**
+     *Construye un objeto de Indexado para los casos especiales con la línea, el mnemónico, los operandos y el registro dados
+     * @param linea línea con la instrucción de direccionamiento indexado
+     * @param mnemonico mnemónico correspondiente a la instrucción ingresada
+     * @param operando1 primer operando de la instrucción
+     * @param operando2 segundo operando de la instrucción
+     * @param isX booleano que indica si se trabajará con el registro X
+     * @param isSpecial booleano que indica si es una de las instrucciones que admite dos operandos
+     */
     public Indexado(String linea, String mnemonico, String operando1, String operando2, boolean isX, boolean isSpecial){
         super(linea);
         this.mnemonico = mnemonico;
@@ -47,6 +63,11 @@ public class Indexado extends Direccionamiento{
     }
     
     @Override
+    /**
+     * Verifica que la línea sea uno de los casos especiales y genera la línea del archivo de salida
+     * Si los operandos son del tamaño equivocado se lanza el error número siete
+     * @return la línea modificada que se debe escribir en el archivo de salida
+     */
     public String toPrintToFile(){
         String aImprimir="";
         if(especial){
@@ -76,6 +97,10 @@ public class Indexado extends Direccionamiento{
         
     }
     
+    /**
+     * Convierte un operando a formato hexadecimal
+     * @return cadena con el operando en hexadecimal o error dos
+     */
     private String operandoToHex(){
         Matcher dec = Pattern.compile("[0-9]+?").matcher(operando);
         
@@ -93,6 +118,9 @@ public class Indexado extends Direccionamiento{
         
     }
     
+    /**
+     * Actualiza la dirección de memoria sobre la cual se está trabajando
+     */
     private void updateAddress(){
         if(especial){
             int add = (operando2.length()  < 3)? 1:2;
@@ -108,18 +136,38 @@ public class Indexado extends Direccionamiento{
             Main.updateAddress(3);
     }
     
+    /**
+     * Verifica que la tabla de indexados con registro X contenga al mnemónico
+     * @param mne mnemónico que se buscará en la tabla
+     * @return booleano que señala si se encontró el mnemónico o no
+     */
     public static boolean contieneMneX(String mne){
         return tablaX.containsKey(mne.toLowerCase());
     }
     
+    /**
+     * Obtiene el opcode de un mnemónico correspondiente utilizando el registro X
+     * @param mne mnemónico cuyo opcode se obtendrá
+     * @return opcode del mnemónico con el registro X
+     */
     public static String obtenOpcodeX(String mne){
         return tablaX.get(mne.toLowerCase());
     }
     
+    /**
+     * Verifica que la tabla de indexados con registro Y contenga al mnemónico
+     * @param mne mnemónico que se buscará en la tabla
+     * @return booleano que señala si se encontró el mnemónico o no
+     */
     public static boolean contieneMneY(String mne){
         return tablaY.containsKey(mne.toLowerCase());
     }
     
+    /**
+     * Obtiene el opcode de un mnemónico correspondiente utilizando el registro X
+     * @param mne mnemónico cuyo opcode se obtendrá
+     * @return opcode del mnemónico con el registro Y
+     */
     public static String obtenOpcodeY(String mne){
         return tablaY.get(mne.toLowerCase());
         
