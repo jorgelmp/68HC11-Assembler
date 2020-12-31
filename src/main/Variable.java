@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 /**
  * Clase cuyas instancias representa una línea con una declaración de variable
- * @author jorge
+ * @author fercho
  */
 public class Variable extends Linea{
     
