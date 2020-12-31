@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 /**
  * Clase cuyas instancias representan etiquetas en el código fuente.
- * @author jorge
+ * @author fercho
  */
 public class Etiqueta extends Linea {
     private String etiqueta;
