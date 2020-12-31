@@ -104,11 +104,10 @@ public class Directo extends Direccionamiento{
     * Para ser accedido desde otras partes del código.
     * Regresa el opcode de unaa instrucción en modo de direccionamiento directo dado su mnemónico
     * @param mne el mnemónico cuyo opcode se quiere obtener
-    * @return Una cadena con el opcode de la etiqueta en hexadecimal a formato de dos o cuatro dígitos
+    * @return Una cadena con el opcode de la instrucción en hexadecimal a formato de dos o cuatro dígitos
     */
     public static String obtenOpcode(String mne){
         return tabla.get(mne.toLowerCase()).toUpperCase();
-        
     }
     
     /**
