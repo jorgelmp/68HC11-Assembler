@@ -1,2 +1,2 @@
 # ProyectoECP
-Proyecto de Estructura y Programación de Computadoras. Un ensambladorpara el MC68HC11.
+Proyecto de Estructura y Programación de Computadoras. Un ensamblador para el MC68HC11.
